@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+      - name: django
+        image: my-django-app
+        ports:
+        - containerPort: 8000
+        env:
+        # 從這裡設定 Django 所需的環境變數
+        - name: DATABASE_NAME
+          value: "chess_demo"
+        - name: DATABASE_USER
+          value: "root"
+        - name: DATABASE_PASSWORD
+          value: ""
+        - name: DATABASE_HOST
+          value: "mysql-service"  # 注意：此處指向 MySQL 的 Service 名稱
+        - name: DATABASE_PORT
+          value: "3306"
+        - name: SECRET_KEY
+          value: "django-insecure-sry5anh195&(6!2*pvd044q=2vfe0x@i6q_@49h9sfog-mtmj="
+        - name: DEBUG
+          value: "True"

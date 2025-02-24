@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,13 +19,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sry5anh195&(6!2*pvd044q=2vfe0x@i6q_@49h9sfog-mtmj='
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'django-insecure-sry5anh195&(6!2*pvd044q=2vfe0x@i6q_@49h9sfog-mtmj='
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
+
+# ALLOWED_HOSTS = []
+try:
+    from env import (
+        SECRET_KEY,
+        DEBUG,
+        DATABASE_NAME,
+        DATABASE_USER,
+        DATABASE_PASSWORD,
+        DATABASE_HOST,
+        DATABASE_PORT,
+    )
+except ImportError:
+    raise Exception("請確認 env.py 存在並包含所有必要的設定變數")
+
+SECRET_KEY = SECRET_KEY
+DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -75,8 +93,12 @@ WSGI_APPLICATION = 'chess_demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': DATABASE_HOST,
+        'PORT': DATABASE_PORT,
     }
 }
 
